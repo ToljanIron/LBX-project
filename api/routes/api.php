@@ -15,7 +15,7 @@ use App\Http\Controllers\EmployeeImportController;
 |
 */
 
-Route::post('/employee/import', [EmployeeImportController::class, 'import']);
+Route::post('/employee', [EmployeeImportController::class, 'import']);
 
 Route::controller(EmployeeController::class)->group( function () {
     Route::get('/employee', 'index');

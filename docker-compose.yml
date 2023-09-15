@@ -25,6 +25,7 @@ services:
       - "9000:9000"
     volumes:
       - ./api:/var/www/api
+      - ./docker/php/memory_limit.ini:/usr/local/etc/php/conf.d/docker-php-memory_limit.ini
     working_dir: /var/www/api
     networks:
       - app-network

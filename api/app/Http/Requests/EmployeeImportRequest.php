@@ -22,7 +22,7 @@ class EmployeeImportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|file|mimes:csv,txt'
+            'csv_file' => 'required|mimes:csv,txt'
         ];
     }
 }
