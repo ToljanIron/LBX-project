@@ -8,9 +8,9 @@
 
 1. Clone the repository:
 
-   ```shell
-   git clone https://github.com/ToljanIron/LBX.git
-   cd LBX
+   ```shell 
+   git clone https://github.com/ToljanIron/LBX-project.git
+   cd LBX-project
    
 2. Navigate to the api directory and copy the .env.example file to .env:
    ```shell
@@ -51,3 +51,31 @@
       ```shell
       
       curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=@/usr/share/nginx/html/import.csv' http://localhost/api/employee
+      
+## How to Use `curl` to Send HTTP Requests
+
+### To send HTTP requests to your Laravel application via the command line, you can use the `curl` utility. Here's how to do it:
+
+## Data Import
+   1. GET Request with Pagination:
+      To send a GET request to the `/employee` route with pagination, specify the page number using the `page` query parameter. For example, to retrieve the second page of employees (assuming 10 employees per page), use the following command:
+      ```shell
+      
+      curl -X GET 'http://localhost/api/employee?page=2'
+   - This will retrieve the list of employees on the specified page.
+   
+   2. GET Request for a Specific Employee:
+      To send a GET request to the /employee/{id} route to retrieve details of a specific employee, replace {id} with the actual "Employee ID" in the following command:
+      ```shell
+      
+      curl -X GET 'http://localhost/api/employee/1'
+   - This will fetch the details of the employee with the given ID.
+      
+   3. DELETE Request to Delete an Employee:
+      To send a DELETE request to the /employee/{id} route to delete a specific employee, replace {id} with the actual employee "Employee ID" in the following command:
+      
+      ```shell
+      
+      curl -X DELETE 'http://localhost/api/employee/1'
+   - This will delete the employee with the specified ID. 
+   
