@@ -1,66 +1,78 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Requirements
+- Docker
+- GIT CLI
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Installation and Setup
 
-## About Laravel
+1. Unzip the project folder and navigate to it using the terminal.:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+   ```shell
+   cd LBX-project
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+2. Navigate to the api directory and copy the .env.example file to .env:
+   ```shell
+   
+   cd api
+   cp .env.example .env
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+3. Return to the project's root directory:
+   ```shell
+   
+   cd ..
 
-## Learning Laravel
+4. Start the Docker containers using docker-compose:
+   ```shell
+   
+   docker-compose up -d
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+5. Check if the lbx-composer container is running. If it's not, start it:
+    ```shell
+    docker start lbx-composer
+    cd api
+    php artisan key:generate
+    docker exec -it lbx-php php artisan migrate
+    docker exec -it lbx-php php artisan queue:work
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Data Import
+1. Copy the data file for import (e.g., import.csv) into the lbx-nginx container:
+   ```shell
+   
+   docker cp <file path>/import.csv <container-id>:/usr/share/nginx/html/
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. Then, enter the lbx-nginx container:
+   ```shell
+   
+   docker exec -it lbx-nginx bash
 
-## Laravel Sponsors
+3. Perform data import using cURL:
+   ```shell
+   
+   curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=@/usr/share/nginx/html/import.csv' http://localhost/api/employee
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## How to Use `curl` to Send HTTP Requests
 
-### Premium Partners
+### To send HTTP requests to your Laravel application via the command line, you can use the `curl` utility. Here's how to do it:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+## Data Import
+1. GET Request with Pagination:
+   To send a GET request to the `/employee` route with pagination, specify the page number using the `page` query parameter. For example, to retrieve the second page of employees (assuming 10 employees per page), use the following command:
+   ```shell
+   
+   curl -X GET 'http://localhost/api/employee?page=2'
+- This will retrieve the list of employees on the specified page.
 
-## Contributing
+2. GET Request for a Specific Employee:
+   To send a GET request to the /employee/{id} route to retrieve details of a specific employee, replace {id} with the actual "Employee ID" in the following command:
+   ```shell
+   
+   curl -X GET 'http://localhost/api/employee/1'
+- This will fetch the details of the employee with the given ID.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. DELETE Request to Delete an Employee:
+   To send a DELETE request to the /employee/{id} route to delete a specific employee, replace {id} with the actual employee "Employee ID" in the following command:
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+   ```shell
+   
+   curl -X DELETE 'http://localhost/api/employee/1'
+- This will delete the employee with the specified ID. 
+   
