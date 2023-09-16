@@ -10,7 +10,7 @@ class EmployeeImportController extends Controller
 {
     public function import(EmployeeImportRequest $employeeImportRequest)
     {
-        $file = $employeeImportRequest->file('csv_file');
+        $file = $employeeImportRequest->file('file');
 
         $path = $file->store('import');
 
